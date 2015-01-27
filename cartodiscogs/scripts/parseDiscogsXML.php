@@ -79,60 +79,54 @@ while ($x->name === 'release') {
 
   $xml = simplexml_load_string($x->readOuterXML());
 
-  if (isset($xml->country) && $xml->country == 'Spain' &&
-      isset($xml->released) ){
+  $year = $xml->released->__toString();
 
-    $year = $xml->released->__toString();
+  $validYear = false;
 
-    $validYear = false;
+  if (isset($dataArray[$year]["totalReleases"])) {
 
-    if (isset($dataArray[$year]["totalReleases"])) {
+    $dataArray[$year]["totalReleases"]++;
+    $validYear = true;
 
-      $dataArray[$year]["totalReleases"]++;
+  } else {
+
+    if(is_numeric($year) && $year > 1900 && $year < 2100){
+      $dataArray[$year]["totalReleases"]=1;
+      $dataArray[$year]["totalTracks"]=0;
+      $dataArray[$year]["validTracks"]=0;
+      foreach ($wordList as $wordData) {
+        $dataArray[$year]["data"][$wordData["name"]]=0;
+      }
       $validYear = true;
-
-    } else {
-
-      if(is_numeric($year) && $year > 1900 && $year < 2100){
-        $dataArray[$year]["totalReleases"]=1;
-        $dataArray[$year]["totalTracks"]=0;
-        $dataArray[$year]["validTracks"]=0;
-        foreach ($wordList as $wordData) {
-          $dataArray[$year]["data"][$wordData["name"]]=0;
-        }
-        $validYear = true;
-      }
-
     }
 
-    if ($validYear) {
-      
-      $tracks = $xml->tracklist->children();
-      foreach ($tracks as $trackTitle) {
+  }
 
-        $dataArray[$year]["totalTracks"]++;
+  if ($validYear) {
+    
+    $tracks = $xml->tracklist->children();
+    foreach ($tracks as $trackTitle) {
 
-        foreach ($wordList as $wordData) {
+      $dataArray[$year]["totalTracks"]++;
 
-          if (preg_match("/\b".$wordData["name"]."\b/i", $trackTitle) ||
-              (isset($wordData["alias"]) && preg_match("/\b".$wordData["alias"]."\b/i", $trackTitle))){
-            $dataArray[$year]["data"][$wordData["name"]]++;
-            $dataArray["words"][$wordData["name"]]++;
-            $dataArray[$year]["validTracks"]++;
-            echo $trackTitle . " (" . $xml->artist . ", $year)\n";
-            $validTrackCounter++;
-          }
+      foreach ($wordList as $wordData) {
 
+        if (preg_match("/\b".$wordData["name"]."\b/i", $trackTitle) ||
+            (isset($wordData["alias"]) && preg_match("/\b".$wordData["alias"]."\b/i", $trackTitle))){
+          $dataArray[$year]["data"][$wordData["name"]]++;
+          $dataArray["words"][$wordData["name"]]++;
+          $dataArray[$year]["validTracks"]++;
+          #echo $trackTitle . " (" . $xml->artist . ", $year)\n";
+          $validTrackCounter++;
         }
-
-        $totalTrackCounter++;
 
       }
 
-      $spanishReleasesCounter++;
+      $totalTrackCounter++;
 
     }
-  
+
+    $spanishReleasesCounter++;
 
   }
 
@@ -144,22 +138,21 @@ while ($x->name === 'release') {
 $x->close();
 ksort($dataArray);
 
-echo "\n\n\n";
-echo "$spanishReleasesCounter releases from a total of $totalReleasesCounter\n";
-echo "$validTrackCounter coincidences found from a total of $totalTrackCounter tracks\n\n\n";
+//echo "$spanishReleasesCounter releases from a total of $totalReleasesCounter\n";
+//echo "$validTrackCounter coincidences found from a total of $totalTrackCounter tracks\n\n\n";
 //print_r($dataArray);
 
-// echo "\"cod_prov\",\"year\",\"tracks\"\n";
-// foreach ($dataArray as $key => $value) {
-//   if ($key != "words") {
-//     foreach ($value["data"] as $provincia => $counter) {
-//       foreach ($wordList as $wordData) {
-//         if($wordData["name"]==$provincia) {
-//           echo $wordData["id"].",$key,$counter\n";
-//           break;
-//         }
-//       }
-//     }
-//   }
-// }
+echo "\"cod_prov\",\"year\",\"tracks\"\n";
+foreach ($dataArray as $key => $value) {
+  if ($key != "words") {
+    foreach ($value["data"] as $provincia => $counter) {
+      foreach ($wordList as $wordData) {
+        if($wordData["name"]==$provincia) {
+          echo $wordData["id"].",$key,$counter\n";
+          break;
+        }
+      }
+    }
+  }
+}
 
