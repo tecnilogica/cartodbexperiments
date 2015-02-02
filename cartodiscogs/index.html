@@ -53,22 +53,6 @@
       #instructions a{ 
         color: #200;
       }        
-      /*
-      div.cartodb-popup.v2:before {
-        border-top: 14px solid #176388;
-      }
-      div.cartodb-popup.v2.header div.cartodb-popup-header:before {
-        background: none;
-      }
-      div.cartodb-popup.v2.header.blue div.cartodb-popup-header {
-        border-radius: 2px;
-        background: -moz-linear-gradient(right center , #3f79ab, #0f5e81) repeat scroll 0 0 rgba(0, 0, 0, 0);
-      }
-      div.cartodb-popup.header.blue div.cartodb-popup-header h4 {
-        color: #eef;
-        margin-bottom: 4px;
-      }
-      */
     </style>
 
 
@@ -81,7 +65,7 @@
       <div id="instructions">
         <h1>Canciones y provincias</h1>
         <h2>El mapa refleja el número de veces que aparece el nombre de la provincia o de su capital en el título de una canción.</h2>
-        <p>Analizando los títulos de 1.123.085 canciones correspondientes a los 153.266 discos dados de alta en <a href="http://discogs.com">Discogs</a> como publicados en España entre 1939 y 2014, se han encontrado 4.871 pistas con el nombre de la provincia o de su capital en su título.</p>
+        <p>Analizando los títulos de 1.123.085 canciones correspondientes a los 153.266 discos dados de alta en <a href="http://discogs.com">Discogs</a> como publicados en España entre 1939 y 2014, se han encontrado 4.871 apariciones del nombre de la provincia o de su capital en el título.</p>
         <ul>
           <li>No se han eliminado las canciones repetidas: si una misma canción aparece en varios discos, cada aparición cuenta de cara al total.</li>
           <li>Si en el título aparece varias veces el nombre de una misma ciudad, se tienen en cuenta todas las repeticiones.</li>
@@ -91,18 +75,6 @@
     </div>
 
     <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
-
-    <!--
-    <script type="infowindow/html" id="infowindow_template">
-      <div class="cartodb-popup header blue v2">
-        <a href="#close" class="cartodb-popup-close-button close">x</a>
-        <div class="cartodb-popup-header">
-          <h4>{{nom_prov}}</h4 >
-          <h1>{{tracksum}} canciones</h1>
-        </div>
-      </div>
-    </script>
-    -->
     
     <script type="cartocss/css" id="css_distribution_1">
       #cancion_provincia_ano{
@@ -112,22 +84,22 @@
         line-width: 0.5;
         line-opacity: 0.4;
       }
-      #cancion_provincia_ano [ tracksum <= 881] {
+      #cancion_provincia_ano [ tracksum <= 906] {
          polygon-fill: #f5ffdf;
       }
-      #cancion_provincia_ano [ tracksum <= 588] {
+      #cancion_provincia_ano [ tracksum <= 604] {
          polygon-fill: #fee391;
       }
-      #cancion_provincia_ano [ tracksum <= 138] {
+      #cancion_provincia_ano [ tracksum <= 145] {
          polygon-fill: #fec44f;
       }
-      #cancion_provincia_ano [ tracksum <= 38] {
+      #cancion_provincia_ano [ tracksum <= 70] {
          polygon-fill: #fe9929;
       }
-      #cancion_provincia_ano [ tracksum <= 16] {
+      #cancion_provincia_ano [ tracksum <= 25] {
          polygon-fill: #ec7014;
       }
-      #cancion_provincia_ano [ tracksum <= 7] {
+      #cancion_provincia_ano [ tracksum <= 10] {
          polygon-fill: #cc4c02;
       }
       #cancion_provincia_ano [ tracksum <= 0] {
@@ -150,7 +122,7 @@
         text-placement: point;
         text-placement-type: simple;
       }
-      #cancion_provincia_ano::labels [ tracksum <= 16] {
+      #cancion_provincia_ano::labels [ tracksum <= 25] {
         text-fill: #f5ffdf;
       }      
       #cancion_provincia_ano::labels [ zoom < 5] {
@@ -194,12 +166,6 @@
         cartodb.createLayer(map_object, 'http://tecnilogica.cartodb.com/api/v2/viz/b0d5adc4-8569-11e4-8e75-0e0c41326911/viz.json', layerOptions).addTo(map_object).done(function(layer) {
 
             var subLayer = layer.getSubLayer(0);
-
-            // subLayer.infowindow.set({
-            //   template: $('#infowindow_template').html(),
-            //   width: 218,
-            //   maxHeight: 100
-            // });
 
             subLayer.setCartoCSS($('#css_distribution_1').html());
 
