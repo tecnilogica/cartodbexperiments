@@ -125,6 +125,9 @@
       #cancion_provincia_ano::labels [ tracksum <= 25] {
         text-fill: #f5ffdf;
       }      
+      #cancion_provincia_ano::labels [ cod_prov >= 51] {
+        text-fill: #8c2d04;
+      }            
       #cancion_provincia_ano::labels [ zoom < 5] {
         text-opacity: 0;
       }      
@@ -133,15 +136,14 @@
       }      
       #cancion_provincia_ano::labels [ zoom = 7] {
          text-size: 18;
-
       }      
       #cancion_provincia_ano::labels [ zoom = 8] {
          text-size: 22;
       }      
       #cancion_provincia_ano::labels [ zoom >= 9] {
          text-size: 24;
-         text-name: [nom_prov] + ': ' + [tracksum] + ' canciones';
-      }  
+      //    text-name: [nom_prov] + ': ' + [tracksum] + ' canciones';
+      }   
 
     </script>  
 
@@ -155,7 +157,8 @@
         }
 
         var layerOptions = {
-          legends: false
+          legends: false,
+          infowindow: false
         }
 
         var map_object = new L.Map('map', mapOptions);
